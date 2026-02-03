@@ -124,7 +124,7 @@ export default function HomePage() {
       },
       {
         "@type": "ContactPoint",
-        "email": "synergeektechnologies@gmail.com",
+        "email": "company@synergeek.in",
         "contactType": "customer service",
         "areaServed": "IN",
         "availableLanguage": "English"
@@ -554,17 +554,17 @@ export default function HomePage() {
                 className="text-center"
               >
                 <motion.a
-                  href="mailto:synergeektechnologies@gmail.com"
+                  href="mailto:company@synergeek.in"
                   whileHover={{ scale: 1.1, y: -5 }}
                   className="inline-block"
                 >
                   <Mail className="w-10 h-10 mx-auto mb-4 text-white" strokeWidth={1.5} />
                 </motion.a>
                 <a
-                  href="mailto:synergeektechnologies@gmail.com"
+                  href="mailto:company@synergeek.in"
                   className="text-white hover:text-primary transition-colors text-sm md:text-base block"
                 >
-                  synergeektechnologies@gmail.com
+                  company@synergeek.in
                 </a>
               </motion.div>
 
@@ -639,7 +639,7 @@ export default function HomePage() {
                 transition={{ duration: 0.6 }}
                 className="text-white/70 text-xs md:text-sm text-center"
               >
-                2025 Synergeek Technologies. All rights reserved.
+                2026 Synergeek Technologies. All rights reserved.
               </motion.p>
 
               {/* Follow Us */}

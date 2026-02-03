@@ -13,5 +13,5 @@ export const EMAIL_TEMPLATE_PARAMS = {
   phone: 'phone',
   organisation: 'organisation',
   message: 'message',
-  to_email: 'synergeektechnologies@gmail.com', // Your company email
+  to_email: 'company@synergeek.in', // Your company email
 }

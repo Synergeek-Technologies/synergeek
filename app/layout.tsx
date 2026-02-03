@@ -84,7 +84,7 @@ export const metadata: Metadata = {
       { url: '/synergeek-og.png', type: 'image/png' },
     ],
     shortcut: '/favicon.ico',
-    apple: '/synergeek-logo.png',
+    apple: '/favicon.ico',
   },
 }
 
