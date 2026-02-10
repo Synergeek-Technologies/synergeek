@@ -477,10 +477,10 @@ export default function ServicesPage() {
                 </motion.div>
                 <div className="space-y-1">
                   <a
-                    href="tel:+918072143386"
+                    href="tel:+919677741597"
                     className="block text-base md:text-lg hover:text-yellow-500 transition-colors"
                   >
-                    +91 80721 43386
+                    +91 96777 41597
                   </a>
                   <a
                     href="tel:+919786763705"
