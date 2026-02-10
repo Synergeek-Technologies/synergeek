@@ -46,7 +46,7 @@ export default function ContactPage() {
       "contactPoint": [
         {
           "@type": "ContactPoint",
-          "telephone": "+918072143386",
+          "telephone": "+919677741597",
           "contactType": "customer service",
           "areaServed": "IN",
           "availableLanguage": "English"
@@ -370,10 +370,10 @@ export default function ContactPage() {
                 </motion.div>
                 <div className="space-y-1">
                   <a
-                    href="tel:+918072143386"
+                    href="tel:+919677741597"
                     className="text-white hover:text-primary transition-colors text-sm md:text-base block"
                   >
-                    +91 80721 43386
+                    +91 96777 41597
                   </a>
                   <a
                     href="tel:+919786763705"
