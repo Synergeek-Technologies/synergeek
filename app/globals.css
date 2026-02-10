@@ -131,3 +131,48 @@
     scroll-behavior: smooth;
   }
 }
+
+/* Basic markdown styling for blog posts (kept minimal + mobile-friendly) */
+.blog-content {
+  @apply text-[15px] leading-7 text-foreground;
+}
+
+.blog-content > * + * {
+  @apply mt-4;
+}
+
+.blog-content h2 {
+  @apply mt-8 text-xl font-semibold tracking-tight;
+}
+
+.blog-content h3 {
+  @apply mt-6 text-lg font-semibold tracking-tight;
+}
+
+.blog-content a {
+  @apply text-primary underline underline-offset-4;
+}
+
+.blog-content ul {
+  @apply list-disc pl-5;
+}
+
+.blog-content ol {
+  @apply list-decimal pl-5;
+}
+
+.blog-content code {
+  @apply rounded bg-secondary px-1 py-0.5 text-[0.9em];
+}
+
+.blog-content pre {
+  @apply overflow-x-auto rounded-lg border border-border/60 bg-card/40 p-4;
+}
+
+.blog-content pre code {
+  @apply bg-transparent p-0;
+}
+
+.blog-content blockquote {
+  @apply border-l-2 border-border/60 pl-4 text-muted-foreground;
+}
