@@ -1,8 +1,8 @@
 ---
 title: "How Small Teams Use AI to Ship Features Faster — Practical Patterns from Synergeek"
-date: "2026-02-11T12:04:00+05:30"
-description: "Practical patterns and workflows small product teams can adopt to use AI effectively and deliver features faster, with examples from Synergeek."
-tags: ["AI","product","engineering"]
+date: "2026-02-11"
+excerpt: "Practical patterns and workflows small product teams can adopt to use AI effectively and deliver features faster, with examples from Synergeek."
+tags: ["AI", "product", "engineering"]
 featuredImage: "/synergeek-og.png"
 ---
 
