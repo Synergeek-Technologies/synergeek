@@ -1,6 +1,6 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Space_Grotesk, Geist_Mono, Bebas_Neue, Roboto_Condensed } from "next/font/google"
+import { Space_Grotesk, Geist_Mono, Bebas_Neue, Roboto_Condensed, Instrument_Serif } from "next/font/google"
 import Script from "next/script"
 import "./globals.css"
 import { VisualEditing } from "next-sanity/visual-editing"
@@ -10,7 +10,8 @@ import { Navigation } from "@/components/navigation"
 import { Toaster } from "@/components/ui/toaster"
 
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"] })
-const _geistMono = Geist_Mono({ subsets: ["latin"] })
+const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono" })
+const instrumentSerif = Instrument_Serif({ subsets: ["latin"], weight: "400", style: "italic", variable: "--font-instrument-serif" })
 const bebasNeue = Bebas_Neue({ subsets: ["latin"], weight: "400" })
 const robotoCondensed = Roboto_Condensed({ subsets: ["latin"], weight: "300", variable: "--font-roboto-condensed" })
 
@@ -151,7 +152,7 @@ export default async function RootLayout({
           `}
         </Script>
       </head>
-      <body className={`font-sans antialiased ${robotoCondensed.variable}`}>
+      <body className={`font-sans antialiased ${robotoCondensed.variable} ${geistMono.variable} ${instrumentSerif.variable}`}>
         <Navigation />
         {children}
         <Toaster />

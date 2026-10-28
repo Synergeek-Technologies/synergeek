@@ -113,7 +113,8 @@
 
 @theme inline {
   --font-sans: "Space Grotesk", "Geist", "Geist Fallback";
-  --font-mono: "Geist Mono", "Geist Mono Fallback";
+  --font-mono: var(--font-geist-mono), "Geist Mono", ui-monospace, monospace;
+  --font-serif: var(--font-instrument-serif), Georgia, serif;
   /* Adding Bebas Neue for ultra-condensed typography */
   --font-condensed: "Bebas Neue", "Oswald", "Arial Narrow", sans-serif;
   --color-background: var(--background);

@@ -15,6 +15,14 @@ import { useRef, useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { StructuredData } from "@/components/structured-data"
 import { getIcon } from "@/lib/icon-map"
+import { ClientMarquee, TestimonialsSection } from "@/components/sections/testimonials"
+import { GrowthMotionSection } from "@/components/sections/growth-motion"
+import { CreativeBentoSection } from "@/components/sections/creative-bento"
+import { ExecutionWorkflowSection } from "@/components/sections/execution-workflow"
+import { OldVsNewSection } from "@/components/sections/old-vs-new"
+import { AiSearchSection } from "@/components/sections/ai-search"
+import { FourWaysSection } from "@/components/sections/four-ways"
+import { FaqSection } from "@/components/sections/faq"
 
 export interface HomePageProps {
   services: Array<{
@@ -234,6 +242,26 @@ export function HomePage({ services, brands, latestPosts, settings }: HomePagePr
     {
       question: "Where is Synergeek located?",
       answer: "Synergeek is based in Coimbatore, Tamil Nadu, India. We work with clients across India and are equipped to partner with brands internationally."
+    },
+    {
+      question: "What is the typical timeline for a project?",
+      answer: "Strategy and the first content calendar are ready within two weeks of kickoff. Shoots and the first campaigns go live in weeks three to four, and most brands see a clear lift in enquiries within the first 90 days."
+    },
+    {
+      question: "Can I customise my package to get a combination of your services?",
+      answer: "Yes. Most clients combine social media management with shoots, ads, or SEO. We build the package around your goal and budget instead of forcing a fixed plan."
+    },
+    {
+      question: "Do you work with industries outside fashion, healthcare, and real estate?",
+      answer: "Yes. We've grown fashion labels, dental clinics, real estate developers, manufacturers, and sports infrastructure companies. If your customers are on social media or searching online, we can help."
+    },
+    {
+      question: "I just need help with one project. Do you accept one-time projects?",
+      answer: "Yes. We take on one-time brand launches, collection shoots, festive campaigns, and website or SEO projects — many of which turn into ongoing partnerships."
+    },
+    {
+      question: "Why should I partner with Synergeek vs building in-house?",
+      answer: "An in-house team means hiring a strategist, designer, editor, shooter, and ads specialist. With Synergeek you get all of them as one team from day one, at a fraction of the cost and with no hiring delay."
     }
   ]
 
@@ -286,6 +314,8 @@ export function HomePage({ services, brands, latestPosts, settings }: HomePagePr
           </p>
         </div>
       </motion.section>
+
+      <ClientMarquee />
 
       {/* Services Section - Responsive Design */}
       <div ref={servicesRef} className="relative">
@@ -418,6 +448,13 @@ export function HomePage({ services, brands, latestPosts, settings }: HomePagePr
         </motion.section>
       </div>
 
+      <GrowthMotionSection />
+      <CreativeBentoSection />
+      <ExecutionWorkflowSection />
+      <OldVsNewSection />
+      <AiSearchSection />
+      <FourWaysSection />
+
       {/* Skills Section */}
       <section ref={skillsRef} className="min-h-screen bg-black py-32 px-6 flex flex-col items-center justify-center">
         <motion.p
@@ -458,6 +495,8 @@ export function HomePage({ services, brands, latestPosts, settings }: HomePagePr
           ))}
         </div>
       </section>
+
+      <TestimonialsSection />
 
       {/* Brands Section */}
       <section className="py-32 px-6 bg-background overflow-hidden">
@@ -641,35 +680,7 @@ export function HomePage({ services, brands, latestPosts, settings }: HomePagePr
         </div>
       </section>
 
-      {/* FAQ Section */}
-      <section id="faq" className="py-24 px-6 bg-background">
-        <div className="max-w-3xl mx-auto">
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-4xl md:text-5xl font-bold tracking-tighter text-center mb-16"
-          >
-            Frequently Asked Questions
-          </motion.h2>
-          <div className="divide-y divide-border">
-            {faqData.map((item, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: index * 0.06 }}
-                className="py-7"
-              >
-                <h3 className="text-base md:text-lg font-semibold text-foreground mb-2">{item.question}</h3>
-                <p className="text-muted-foreground text-sm md:text-base leading-relaxed">{item.answer}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <FaqSection items={faqData} />
 
       {/* Footer */}
       <footer className="bg-black text-white relative z-20">
