@@ -325,6 +325,7 @@ export function HomePage({ services, brands, latestPosts, settings }: HomePagePr
           className="relative sm:sticky sm:top-0 sm:min-h-screen flex items-center justify-center overflow-hidden"
         >
           <div className="absolute inset-0 bg-[#7C3AED]" />
+          <div className="absolute inset-0 tier-texture" />
           <div className="relative z-10 max-w-7xl mx-auto px-6 py-12 sm:py-20">
             <motion.div
               initial={{ opacity: 0, y: 50 }}
@@ -368,6 +369,7 @@ export function HomePage({ services, brands, latestPosts, settings }: HomePagePr
           className="relative sm:sticky sm:top-0 sm:min-h-screen flex items-center justify-center overflow-hidden mt-[-30px] md:mt-0"
         >
           <div className="absolute inset-0 bg-[#FF5C5C]" />
+          <div className="absolute inset-0 tier-texture" />
           <div className="relative z-10 max-w-7xl mx-auto px-6 py-12 sm:py-20">
             <motion.div
               initial={{ opacity: 0, y: 50 }}
@@ -411,6 +413,7 @@ export function HomePage({ services, brands, latestPosts, settings }: HomePagePr
           className="relative sm:sticky sm:top-0 sm:min-h-screen flex items-center justify-center overflow-hidden mt-[-49px] md:mt-0"
         >
           <div className="absolute inset-0 bg-[#FFD60A]" />
+          <div className="absolute inset-0 tier-texture" />
           <div className="relative z-10 max-w-7xl mx-auto px-6 py-12 sm:py-20">
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
