@@ -5,25 +5,15 @@ import { AnimatePresence, motion } from "framer-motion"
 import { Mail, MapPin, Phone, ArrowUp, Share2, ArrowRight, ArrowUpRight, Plus, Check } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-import { SanityImage } from "@/components/sanity-image"
 import { StructuredData } from "@/components/structured-data"
 import { clients, getClient } from "@/lib/clients"
-import { serviceDetails, serviceStages } from "@/lib/service-details"
+import { serviceDetails, serviceStages, websiteProjects } from "@/lib/service-details"
 
 export interface ServicesPageProps {
   services: Array<{
     title: string
     description: string
     section: string
-  }>
-  portfolio: Array<{
-    _id: string
-    title: string
-    description: string
-    image: any
-    tags: string[]
-    aspectRatio: string
-    order: number
   }>
   settings: {
     contactEmail: string
@@ -87,7 +77,7 @@ const servicesFaq = [
 
 const condensed = { fontFamily: "var(--font-condensed)" }
 
-export function ServicesPage({ services, portfolio, settings }: ServicesPageProps) {
+export function ServicesPage({ services, settings }: ServicesPageProps) {
   const letters = "SERVICES".split("")
   const [activeService, setActiveService] = useState(0)
   const [openFaq, setOpenFaq] = useState<number | null>(0)
@@ -134,6 +124,21 @@ export function ServicesPage({ services, portfolio, settings }: ServicesPageProp
       }
     }))
   }
+
+  const clientRows = [
+    ...clients.map((client) => ({
+      slug: client.slug,
+      name: client.name,
+      industry: client.industry,
+      location: client.location,
+      logo: client.logo,
+      preview: client.images[1],
+      href: `https://www.instagram.com/${client.handle}/`,
+      work: client.work,
+      isWebsite: false,
+    })),
+    ...websiteProjects.map((project) => ({ ...project, isWebsite: true })),
+  ]
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" })
@@ -402,114 +407,6 @@ export function ServicesPage({ services, portfolio, settings }: ServicesPageProp
         </div>
       </section>
 
-      {/* Portfolio Section */}
-      <section id="portfolio" className="relative min-h-screen bg-black py-20 scroll-mt-20">
-        <div className="max-w-7xl mx-auto px-6">
-          {/* Portfolio Header */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-16"
-          >
-            <h2
-              className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white mb-6"
-              style={condensed}
-            >
-              PORTFOLIO
-            </h2>
-            <p className="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto">
-              Campaigns, content, and brand work we've shipped for our partners.
-            </p>
-          </motion.div>
-
-          {/* Portfolio Grid - Masonry Style */}
-          <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-4 space-y-4">
-            {portfolio.map((item, index) => (
-              <motion.div
-                key={item._id}
-                initial={{
-                  opacity: 0,
-                  y: -200,
-                  scale: 0.8,
-                  rotateX: -90
-                }}
-                whileInView={{
-                  opacity: 1,
-                  y: 0,
-                  scale: 1,
-                  rotateX: 0
-                }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{
-                  duration: 0.8,
-                  delay: index * 0.1,
-                  type: "spring",
-                  stiffness: 100,
-                  damping: 12,
-                  mass: 0.8,
-                  bounce: 0.3
-                }}
-                whileHover={{
-                  scale: 1.05,
-                  y: -5,
-                  transition: { duration: 0.3 }
-                }}
-                className="break-inside-avoid mb-4 group cursor-pointer"
-                style={{ transformStyle: "preserve-3d" }}
-              >
-                <motion.div
-                  className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-800 to-gray-900 shadow-2xl"
-                  initial={{ boxShadow: "0 0 0 rgba(0,0,0,0)" }}
-                  whileInView={{
-                    boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)",
-                    transition: { duration: 0.8, delay: index * 0.1 }
-                  }}
-                >
-                  {/* Portfolio Image */}
-                  <div
-                    className="w-full relative overflow-hidden"
-                    style={{ aspectRatio: item.aspectRatio }}
-                  >
-                    <SanityImage
-                      source={item.image}
-                      alt={item.image?.alt || item.title}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-                    />
-
-                    {/* Hover overlay - Always visible on mobile, hover on desktop */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-                      <div className="text-white w-full">
-                        <h4 className="font-bold text-xl mb-2 drop-shadow-lg">{item.title}</h4>
-                        <p className="text-sm text-gray-100 mb-3 leading-relaxed drop-shadow-md">
-                          {item.description}
-                        </p>
-                        <div className="flex gap-2 flex-wrap">
-                          {(item.tags ?? []).map((tag, tagIndex) => (
-                            <span
-                              key={tagIndex}
-                              className="px-3 py-1 bg-yellow-500 text-black text-xs font-bold rounded-full shadow-lg"
-                            >
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Shine effect */}
-                    <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-12"></div>
-                  </div>
-                </motion.div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Clients by Service */}
       <section className="bg-black py-20 px-6">
         <div className="max-w-7xl mx-auto">
@@ -524,10 +421,10 @@ export function ServicesPage({ services, portfolio, settings }: ServicesPageProp
             WHO WE DO IT FOR
           </motion.h2>
           <div className="divide-y divide-white/10 border-y border-white/10">
-            {clients.map((client, index) => (
+            {clientRows.map((client, index) => (
               <motion.a
                 key={client.slug}
-                href={`https://www.instagram.com/${client.handle}/`}
+                href={client.href}
                 target="_blank"
                 rel="noopener noreferrer"
                 initial={{ opacity: 0, y: 20 }}
@@ -543,7 +440,10 @@ export function ServicesPage({ services, portfolio, settings }: ServicesPageProp
                   <p className="text-2xl md:text-4xl text-white group-hover:text-primary transition-colors leading-none" style={condensed}>
                     {client.name.toUpperCase()}
                   </p>
-                  <p className="text-sm text-gray-500 mt-1">{client.industry} · {client.location}</p>
+                  <p className="text-sm text-gray-500 mt-1">
+                    {client.industry}
+                    {client.location && ` · ${client.location}`}
+                  </p>
                 </div>
                 <div className="hidden md:flex flex-wrap gap-2">
                   {client.work.map((item) => (
@@ -553,8 +453,8 @@ export function ServicesPage({ services, portfolio, settings }: ServicesPageProp
                   ))}
                 </div>
                 <ArrowUpRight className="w-6 h-6 text-gray-600 group-hover:text-primary group-hover:rotate-45 transition-all" />
-                <div className="pointer-events-none absolute right-16 top-1/2 -translate-y-1/2 w-28 aspect-[4/5] rounded-xl overflow-hidden opacity-0 scale-90 rotate-6 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 hidden lg:block z-10 shadow-2xl">
-                  <Image src={client.images[1]} alt={`${client.name} work`} fill sizes="112px" className="object-cover" />
+                <div className={`pointer-events-none absolute right-16 top-1/2 -translate-y-1/2 ${client.isWebsite ? "w-56 aspect-[2/1]" : "w-28 aspect-[4/5]"} rounded-xl overflow-hidden opacity-0 scale-90 rotate-6 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 hidden lg:block z-10 shadow-2xl`}>
+                  <Image src={client.preview} alt={`${client.name} work`} fill sizes="224px" className="object-cover object-top" />
                 </div>
               </motion.a>
             ))}

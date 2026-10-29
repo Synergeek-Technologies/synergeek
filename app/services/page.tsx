@@ -1,16 +1,14 @@
 import { sanityFetch } from '@/sanity/lib/live'
-import { servicesQuery, portfolioQuery, siteSettingsQuery } from '@/sanity/lib/queries'
+import { servicesQuery, siteSettingsQuery } from '@/sanity/lib/queries'
 import { ServicesPage } from '@/components/services-page'
 
 
 export default async function ServicesPageRoute() {
   const [
     { data: services },
-    { data: portfolio },
     { data: settings },
   ] = await Promise.all([
     sanityFetch({ query: servicesQuery, tags: ['services'] }),
-    sanityFetch({ query: portfolioQuery, tags: ['portfolio'] }),
     sanityFetch({ query: siteSettingsQuery, tags: ['siteSettings'] }),
   ])
 
@@ -23,7 +21,6 @@ export default async function ServicesPageRoute() {
   return (
     <ServicesPage
       services={serviceItems}
-      portfolio={portfolio ?? []}
       settings={settings ?? {
         contactEmail: '',
         phone1: '',
