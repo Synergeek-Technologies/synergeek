@@ -42,3 +42,37 @@ export const serviceStages = [
   { key: "tier2", label: "Get Leads", line: "Turn attention into enquiries." },
   { key: "tier3", label: "Get Remembered", line: "Build a brand they come back to." },
 ]
+
+export interface WebsiteProject {
+  slug: string
+  name: string
+  industry: string
+  location: string
+  logo: string
+  preview: string
+  href: string
+  work: string[]
+}
+
+export const websiteProjects: WebsiteProject[] = [
+  {
+    slug: "studio-miradia",
+    name: "Studio Miradia",
+    industry: "Saree Label",
+    location: "",
+    logo: "/clients/studio-miradia-logo.png",
+    preview: "/clients/studio-miradia-site.jpg",
+    href: "https://www.instagram.com/studiomiradia/",
+    work: ["E-commerce Website", "SEO", "Social Growth"],
+  },
+  {
+    slug: "trilok-omshri-jewels",
+    name: "Trilok Omshri Jewels",
+    industry: "Jewellery Store",
+    location: "Coimbatore",
+    logo: "/clients/trilok-omshri-logo.png",
+    preview: "/clients/trilok-omshri-1.jpg",
+    href: "https://www.instagram.com/trilok_omsrijewel/",
+    work: ["Website", "Product Shoots", "Social Growth"],
+  },
+]
