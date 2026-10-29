@@ -1,5 +1,3 @@
-import Script from 'next/script'
-
 interface StructuredDataProps {
   data: any
   id?: string
@@ -8,10 +6,10 @@ interface StructuredDataProps {
 export function StructuredData({ data, id }: StructuredDataProps) {
   const scriptId = id || `structured-data-${data['@type']?.toLowerCase() || 'default'}`
   return (
-    <Script
+    <script
       id={scriptId}
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(data).replace(/</g, '\\u003c') }}
     />
   )
 }
