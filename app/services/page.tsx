@@ -14,11 +14,15 @@ export default async function ServicesPageRoute() {
     sanityFetch({ query: siteSettingsQuery, tags: ['siteSettings'] }),
   ])
 
-  const serviceTitles = (services ?? []).map((s: any) => s.title)
+  const serviceItems = (services ?? []).map((s: any) => ({
+    title: s.title,
+    description: s.description ?? '',
+    section: s.section ?? '',
+  }))
 
   return (
     <ServicesPage
-      services={serviceTitles}
+      services={serviceItems}
       portfolio={portfolio ?? []}
       settings={settings ?? {
         contactEmail: '',
