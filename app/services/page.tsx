@@ -1,4 +1,5 @@
 import { sanityFetch } from '@/sanity/lib/live'
+import { withSettingsFallback } from '@/lib/site-config'
 import { servicesQuery, siteSettingsQuery } from '@/sanity/lib/queries'
 import { ServicesPage } from '@/components/services-page'
 
@@ -21,15 +22,7 @@ export default async function ServicesPageRoute() {
   return (
     <ServicesPage
       services={serviceItems}
-      settings={settings ?? {
-        contactEmail: '',
-        phone1: '',
-        phone2: '',
-        address: '',
-        instagramUrl: '',
-        orgName: 'Synergeek',
-        companyDescription: 'A creative marketing agency that turns content, ads, and social into customers — every day.',
-      }}
+      settings={withSettingsFallback(settings)}
     />
   )
 }

@@ -39,7 +39,8 @@ export function FaqSection({ items }: { items: Array<{ question: string; answer:
                     </span>
                   </AccordionPrimitive.Trigger>
                 </AccordionPrimitive.Header>
-                <AccordionPrimitive.Content className="overflow-hidden data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down">
+                {/* forceMount keeps every answer in the server HTML (matches FAQPage schema); closed panels are hidden with CSS */}
+                <AccordionPrimitive.Content forceMount className="overflow-hidden data-[state=closed]:hidden data-[state=open]:animate-accordion-down">
                   <p className="px-6 md:px-14 pb-8 max-w-4xl text-white/70 text-base md:text-lg leading-relaxed">{item.answer}</p>
                 </AccordionPrimitive.Content>
               </AccordionPrimitive.Item>

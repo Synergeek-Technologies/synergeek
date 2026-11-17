@@ -1,41 +1,18 @@
 import type { Metadata } from "next"
+import { SITE_URL } from "@/lib/site-config"
+
+const TITLE = "Contact Synergeek — Digital Agency in RS Puram, Coimbatore"
+const DESCRIPTION =
+  "Talk to Synergeek in RS Puram, Coimbatore about your website, app, video, SEO or ads. Call +91 96777 41597 or send a message for a free consultation."
+const URL = `${SITE_URL}/contact`
+const OG_IMAGE = { url: "/synergeek-og.png", width: 1600, height: 900, alt: "Contact Synergeek, Coimbatore" }
 
 export const metadata: Metadata = {
-  title: "Contact Us — Let's Grow Your Brand | Synergeek",
-  description: "Contact Synergeek for Lead Generation, Social Media Management, Performance Marketing, Content Strategy, and SEO. Located in Coimbatore, India. Get a free consultation for your brand.",
-  keywords: [
-    "Contact Synergeek",
-    "Marketing Agency Contact",
-    "Lead Generation Consultation",
-    "Social Media Marketing Consultation",
-    "Performance Marketing Consultation",
-    "SEO Consultation",
-    "Coimbatore Marketing Agency",
-    "India Marketing Agency",
-    "Free Consultation",
-    "Brand Inquiry"
-  ],
-  openGraph: {
-    title: "Contact Us — Let's Grow Your Brand | Synergeek",
-    description: "Contact Synergeek for Lead Generation, Social Media Management, Performance Marketing, Content Strategy, and SEO. Located in Coimbatore, India. Get a free consultation for your brand.",
-    url: "https://www.synergeek.in/contact",
-    images: [
-      {
-        url: "/synergeek-logo.png",
-        width: 1200,
-        height: 630,
-        alt: "Contact Synergeek — Creative Marketing Agency",
-      },
-    ],
-  },
-  twitter: {
-    title: "Contact Us — Let's Grow Your Brand | Synergeek",
-    description: "Contact Synergeek for Lead Generation, Social Media Management, Performance Marketing, Content Strategy, and SEO. Located in Coimbatore, India. Get a free consultation for your brand.",
-    images: ["/synergeek-logo.png"],
-  },
-  alternates: {
-    canonical: "https://www.synergeek.in/contact",
-  },
+  title: { absolute: TITLE },
+  description: DESCRIPTION,
+  openGraph: { title: TITLE, description: DESCRIPTION, url: URL, images: [OG_IMAGE] },
+  twitter: { title: TITLE, description: DESCRIPTION, images: [OG_IMAGE.url] },
+  alternates: { canonical: URL },
 }
 
 export default function ContactLayout({

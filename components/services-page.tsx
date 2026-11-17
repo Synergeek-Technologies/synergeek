@@ -1,12 +1,15 @@
 "use client"
 
+import type React from "react"
 import { useState } from "react"
-import { AnimatePresence, motion } from "framer-motion"
-import { Mail, MapPin, Phone, ArrowUp, Share2, ArrowRight, ArrowUpRight, Plus, Check } from "lucide-react"
+import { motion } from "framer-motion"
+import { ArrowRight, ArrowUpRight, Plus, Check } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { StructuredData } from "@/components/structured-data"
-import { clients, getClient } from "@/lib/clients"
+import { SiteFooter } from "@/components/site-footer"
+import { BUSINESS_ID, SITE_URL, buildFaqSchema } from "@/lib/site-config"
+import { clientHref, clients, getClient } from "@/lib/clients"
 import { serviceDetails, serviceStages, websiteProjects } from "@/lib/service-details"
 
 export interface ServicesPageProps {
@@ -77,6 +80,17 @@ const servicesFaq = [
 
 const condensed = { fontFamily: "var(--font-condensed)" }
 
+/** CSS-only collapse: content stays in the server-rendered HTML for crawlers. */
+function Collapse({ open, children }: { open: boolean; children: React.ReactNode }) {
+  return (
+    <div
+      className={`grid transition-[grid-template-rows,opacity] duration-300 ease-out ${open ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}
+    >
+      <div className="overflow-hidden">{children}</div>
+    </div>
+  )
+}
+
 export function ServicesPage({ services, settings }: ServicesPageProps) {
   const letters = "SERVICES".split("")
   const [activeService, setActiveService] = useState(0)
@@ -85,22 +99,15 @@ export function ServicesPage({ services, settings }: ServicesPageProps) {
   const servicesStructuredData = {
     "@context": "https://schema.org",
     "@type": "Service",
-    "name": `${settings.orgName} - Creative Marketing Services`,
-    "description": settings.companyDescription || "Synergeek is a creative marketing agency in India turning social media, ads, and content into measurable growth.",
-    "provider": {
-      "@type": "Organization",
-      "name": settings.orgName,
-      "url": "https://www.synergeek.in",
-      "logo": "https://www.synergeek.in/synergeek-logo.png"
-    },
-    "serviceType": "Creative Marketing & Growth",
-    "areaServed": {
-      "@type": "Country",
-      "name": "India"
-    },
+    "name": "Digital Marketing Services in Coimbatore",
+    "url": `${SITE_URL}/services`,
+    "description": settings.companyDescription,
+    "provider": { "@id": BUSINESS_ID },
+    "serviceType": "Digital Marketing",
+    "areaServed": { "@type": "City", "name": "Coimbatore" },
     "hasOfferCatalog": {
       "@type": "OfferCatalog",
-      "name": "Core Services",
+      "name": "Synergeek Services",
       "itemListElement": services.map((service) => ({
         "@type": "Offer",
         "itemOffered": {
@@ -112,18 +119,7 @@ export function ServicesPage({ services, settings }: ServicesPageProps) {
     }
   }
 
-  const faqStructuredData = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": servicesFaq.map(({ question, answer }) => ({
-      "@type": "Question",
-      "name": question,
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": answer
-      }
-    }))
-  }
+  const faqStructuredData = buildFaqSchema(servicesFaq)
 
   const clientRows = [
     ...clients.map((client) => ({
@@ -132,17 +128,13 @@ export function ServicesPage({ services, settings }: ServicesPageProps) {
       industry: client.industry,
       location: client.location,
       logo: client.logo,
-      preview: client.images[1],
-      href: `https://www.instagram.com/${client.handle}/`,
+      preview: client.images?.[1],
+      href: clientHref(client),
       work: client.work,
       isWebsite: false,
     })),
     ...websiteProjects.map((project) => ({ ...project, isWebsite: true })),
   ]
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" })
-  }
 
   return (
     <div className="min-h-screen">
@@ -180,6 +172,11 @@ export function ServicesPage({ services, settings }: ServicesPageProps) {
                   </motion.span>
                 ))}
               </span>
+              {" "}
+
+              <span className="block mt-2 text-lg md:text-2xl lg:text-3xl font-semibold tracking-normal text-balance text-primary">
+                Digital Marketing Services in Coimbatore
+              </span>
             </h1>
           </motion.div>
 
@@ -187,7 +184,7 @@ export function ServicesPage({ services, settings }: ServicesPageProps) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.8 }}
-            className="text-md md:text-lg mt-[-30px] lg:text-xl text-muted-foreground max-w-4xl mx-auto mb-12 leading-relaxed text-balance"
+            className="text-md md:text-lg lg:text-xl text-muted-foreground max-w-4xl mx-auto mb-12 leading-relaxed text-balance"
             style={{ fontFamily: "var(--font-roboto-condensed)" }}
           >
             {settings.companyDescription || "A creative marketing agency that turns content, ads, and social into customers — every day."}
@@ -268,15 +265,7 @@ export function ServicesPage({ services, settings }: ServicesPageProps) {
                           <Plus className={`w-4 h-4 transition-transform duration-300 ${isOpen ? "rotate-45" : ""}`} />
                         </span>
                       </button>
-                      <AnimatePresence initial={false}>
-                        {isOpen && (
-                          <motion.div
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: "auto", opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            transition={{ duration: 0.35 }}
-                            className="overflow-hidden"
-                          >
+                      <Collapse open={isOpen}>
                             <div className="pb-8 md:pl-16 grid sm:grid-cols-[1fr_auto] gap-6">
                               <div>
                                 <p className="text-gray-900 text-lg leading-relaxed">{detail?.outcome ?? service.description}</p>
@@ -302,9 +291,7 @@ export function ServicesPage({ services, settings }: ServicesPageProps) {
                                 </div>
                               )}
                             </div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
+                      </Collapse>
                     </motion.div>
                   )
                 })}
@@ -453,9 +440,11 @@ export function ServicesPage({ services, settings }: ServicesPageProps) {
                   ))}
                 </div>
                 <ArrowUpRight className="w-6 h-6 text-gray-600 group-hover:text-primary group-hover:rotate-45 transition-all" />
+                {client.preview && (
                 <div className={`pointer-events-none absolute right-16 top-1/2 -translate-y-1/2 ${client.isWebsite ? "w-56 aspect-[2/1]" : "w-28 aspect-[4/5]"} rounded-xl overflow-hidden opacity-0 scale-90 rotate-6 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 hidden lg:block z-10 shadow-2xl`}>
                   <Image src={client.preview} alt={`${client.name} work`} fill sizes="224px" className="object-cover object-top" />
                 </div>
+                )}
               </motion.a>
             ))}
           </div>
@@ -547,19 +536,9 @@ export function ServicesPage({ services, settings }: ServicesPageProps) {
                       <Plus className={`w-4 h-4 transition-transform duration-300 ${isOpen ? "rotate-45" : ""}`} />
                     </span>
                   </button>
-                  <AnimatePresence initial={false}>
-                    {isOpen && (
-                      <motion.p
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.3 }}
-                        className="overflow-hidden text-gray-600 leading-relaxed pr-12"
-                      >
-                        <span className="block pb-6">{item.answer}</span>
-                      </motion.p>
-                    )}
-                  </AnimatePresence>
+                  <Collapse open={isOpen}>
+                    <p className="text-gray-600 leading-relaxed pr-12 pb-6">{item.answer}</p>
+                  </Collapse>
                 </div>
               )
             })}
@@ -594,108 +573,7 @@ export function ServicesPage({ services, settings }: ServicesPageProps) {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-black text-white relative z-20">
-        {/* Upper Tier - Contact Information */}
-        <div className="border-b border-gray-800">
-          <div className="max-w-7xl mx-auto px-6 py-16 md:py-20">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8">
-              {/* Email */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-                className="flex flex-col items-center text-center group"
-              >
-                <motion.div whileHover={{ scale: 1.1, rotate: 5 }} transition={{ duration: 0.3 }} className="mb-4">
-                  <Mail className="w-8 h-8 md:w-10 md:h-10 text-white group-hover:text-yellow-500 transition-colors" />
-                </motion.div>
-                <a
-                  href={`mailto:${settings.contactEmail}`}
-                  className="text-base md:text-lg hover:text-yellow-500 transition-colors"
-                >
-                  {settings.contactEmail}
-                </a>
-              </motion.div>
-
-              {/* Address */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.1 }}
-                className="flex flex-col items-center text-center group"
-              >
-                <motion.div whileHover={{ scale: 1.1, rotate: 5 }} transition={{ duration: 0.3 }} className="mb-4">
-                  <MapPin className="w-8 h-8 md:w-10 md:h-10 text-white group-hover:text-yellow-500 transition-colors" />
-                </motion.div>
-                <p className="text-base md:text-lg max-w-xs">{settings.address}</p>
-              </motion.div>
-
-              {/* Phone */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-                className="flex flex-col items-center text-center group"
-              >
-                <motion.div whileHover={{ scale: 1.1, rotate: 5 }} transition={{ duration: 0.3 }} className="mb-4">
-                  <Phone className="w-8 h-8 md:w-10 md:h-10 text-white group-hover:text-yellow-500 transition-colors" />
-                </motion.div>
-                <div className="space-y-1">
-                  <a
-                    href={`tel:${settings.phone1?.replace(/\s/g, '')}`}
-                    className="block text-base md:text-lg hover:text-yellow-500 transition-colors"
-                  >
-                    {settings.phone1}
-                  </a>
-                  <a
-                    href={`tel:${settings.phone2?.replace(/\s/g, '')}`}
-                    className="block text-base md:text-lg hover:text-yellow-500 transition-colors"
-                  >
-                    {settings.phone2}
-                  </a>
-                </div>
-              </motion.div>
-            </div>
-          </div>
-        </div>
-
-        {/* Lower Tier - Footer Bar */}
-        <div className="py-6">
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-              {/* Back Top */}
-              <motion.button
-                onClick={scrollToTop}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="flex items-center gap-2 text-sm md:text-base hover:text-yellow-500 transition-colors group"
-              >
-                <span>Back Top</span>
-                <motion.div whileHover={{ y: -3 }} transition={{ duration: 0.3 }}>
-                  <ArrowUp className="w-4 h-4 group-hover:text-yellow-500 transition-colors" />
-                </motion.div>
-              </motion.button>
-
-              {/* Copyright */}
-              <p className="text-sm md:text-base text-gray-400 text-center">
-                2026 {settings.orgName}. All rights reserved.
-              </p>
-
-              {/* Follow Us */}
-              <Link href={settings.instagramUrl || '#'} target="_blank" className="flex items-center gap-2 text-sm md:text-base hover:text-yellow-500 transition-colors group">
-                <span>Follow Us</span>
-                <motion.div whileHover={{ rotate: 15 }} transition={{ duration: 0.3 }}>
-                  <Share2 className="w-4 h-4 group-hover:text-yellow-500 transition-colors" />
-                </motion.div>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter settings={settings} />
     </div>
   )
 }

@@ -8,6 +8,8 @@ import { draftMode } from "next/headers"
 import { SanityLive } from "@/sanity/lib/live"
 import { Navigation } from "@/components/navigation"
 import { Toaster } from "@/components/ui/toaster"
+import { StructuredData } from "@/components/structured-data"
+import { SITE_URL, buildBusinessSchema, buildWebsiteSchema } from "@/lib/site-config"
 
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"] })
 const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono" })
@@ -15,33 +17,17 @@ const instrumentSerif = Instrument_Serif({ subsets: ["latin"], weight: "400", st
 const bebasNeue = Bebas_Neue({ subsets: ["latin"], weight: "400" })
 const robotoCondensed = Roboto_Condensed({ subsets: ["latin"], weight: "300", variable: "--font-roboto-condensed" })
 
+const DEFAULT_TITLE = "Synergeek | Digital Marketing Agency in Coimbatore"
+const DEFAULT_DESCRIPTION =
+  "Synergeek is a digital marketing agency in Coimbatore building websites, mobile apps, videos, SEO and social media campaigns that turn attention into customers."
+
 export const metadata: Metadata = {
-  metadataBase: new URL('https://www.synergeek.in'),
+  metadataBase: new URL(SITE_URL),
   title: {
-    default: "Synergeek | Creative Marketing Agency in India",
+    default: DEFAULT_TITLE,
     template: "%s | Synergeek"
   },
-  description: "Synergeek is a creative marketing agency in India turning social media, ads, and content into measurable growth. Lead generation, SMM, performance marketing, content strategy, and SEO.",
-  keywords: [
-    "Synergeek",
-    "Creative Marketing Agency",
-    "Marketing Agency India",
-    "Social Media Lead Generation",
-    "Social Media Management",
-    "Performance Marketing",
-    "Meta Ads",
-    "Google Ads",
-    "Content Strategy",
-    "Branding",
-    "SEO Services India",
-    "Search Engine Optimization",
-    "Lead Generation Agency",
-    "Digital Marketing Agency India",
-    "Creative Agency Coimbatore",
-    "Marketing Agency Coimbatore",
-    "Coimbatore",
-    "India"
-  ],
+  description: DEFAULT_DESCRIPTION,
   authors: [{ name: "Synergeek", url: "https://www.synergeek.in" }],
   creator: "Synergeek",
   publisher: "Synergeek",
@@ -59,25 +45,23 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_IN',
-    url: 'https://www.synergeek.in',
+    url: SITE_URL,
     siteName: 'Synergeek',
-    title: 'Synergeek | Creative Marketing Agency in India',
-    description: 'Synergeek is a creative marketing agency in India turning social media, ads, and content into measurable growth. Lead generation, SMM, performance marketing, content strategy, and SEO.',
+    title: DEFAULT_TITLE,
+    description: DEFAULT_DESCRIPTION,
     images: [
       {
         url: '/synergeek-og.png',
-        width: 1200,
-        height: 630,
-        alt: 'Synergeek — Creative Marketing Agency in India',
+        width: 1600,
+        height: 900,
+        alt: 'Synergeek — Digital Marketing Agency in Coimbatore',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    site: '@synergeek',
-    creator: '@synergeek',
-    title: 'Synergeek | Creative Marketing Agency in India',
-    description: 'Synergeek is a creative marketing agency in India turning social media, ads, and content into measurable growth. Lead generation, SMM, performance marketing, content strategy, and SEO.',
+    title: DEFAULT_TITLE,
+    description: DEFAULT_DESCRIPTION,
     images: ['/synergeek-og.png'],
   },
   alternates: {
@@ -107,33 +91,9 @@ export default async function RootLayout({
     <html lang="en">
       <head>
         <meta name="facebook-domain-verification" content="cfhzzbdcpl610u3v3qsdk9pzox2vss" />
-        {/* Organisation JSON-LD — sitewide, static */}
-        <script
-          type="application/ld+json"
-          // eslint-disable-next-line react/no-danger
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Organization",
-              "url": "https://www.synergeek.in/",
-              "name": "Synergeek",
-              "description": "Synergeek is a creative marketing agency in India turning social media, ads, and content into measurable growth — specialising in lead generation, social media management, performance marketing, content strategy, and SEO.",
-              "telephone": "+91-9677741597",
-              "email": "company@synergeek.in",
-              "logo": "https://www.synergeek.in/synergeek-logo.png",
-              "address": {
-                "@type": "PostalAddress",
-                "addressLocality": "Coimbatore",
-                "addressRegion": "Tamil Nadu",
-                "addressCountry": "IN",
-                "postalCode": "641002"
-              },
-              "sameAs": [
-                "https://www.instagram.com/synergeek.in"
-              ]
-            })
-          }}
-        />
+        {/* Sitewide business + website JSON-LD — referenced by @id from page-level schema */}
+        <StructuredData data={buildBusinessSchema()} id="business-schema" />
+        <StructuredData data={buildWebsiteSchema()} id="website-schema" />
         {/* Google Analytics & Google Ads Conversion ID: AW-16812402326 */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-F3078JXHG0"

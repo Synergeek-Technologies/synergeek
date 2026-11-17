@@ -1,46 +1,18 @@
 import type { Metadata } from "next"
+import { SITE_URL } from "@/lib/site-config"
+
+const TITLE = "Digital Marketing Services in Coimbatore"
+const DESCRIPTION =
+  "Websites, mobile apps, video production, SEO, social media and Meta & Google Ads — digital marketing services in Coimbatore from Synergeek. See our work."
+const URL = `${SITE_URL}/services`
+const OG_IMAGE = { url: "/synergeek-og.png", width: 1600, height: 900, alt: "Synergeek digital marketing services in Coimbatore" }
 
 export const metadata: Metadata = {
-  title: "Our Services — Lead Gen, Ads, SMM, Content & SEO",
-  description: "Synergeek's creative marketing services: Social Media Lead Generation, Social Media Management, Performance Marketing (Meta & Google Ads), Content Strategy & Branding, and Search Engine Optimization (SEO).",
-  keywords: [
-    "Social Media Lead Generation",
-    "Social Media Management",
-    "Performance Marketing",
-    "Meta Ads",
-    "Google Ads",
-    "Content Strategy",
-    "Branding Services",
-    "SEO Services",
-    "Search Engine Optimization",
-    "Lead Generation Services",
-    "Marketing Agency India",
-    "Creative Agency Coimbatore",
-    "Ad Campaigns",
-    "Brand Storytelling",
-    "Organic Growth"
-  ],
-  openGraph: {
-    title: "Our Services — Lead Gen, Ads, SMM, Content & SEO | Synergeek",
-    description: "Synergeek's creative marketing services: Social Media Lead Generation, Social Media Management, Performance Marketing (Meta & Google Ads), Content Strategy & Branding, and Search Engine Optimization (SEO).",
-    url: "https://www.synergeek.in/services",
-    images: [
-      {
-        url: "/synergeek-logo.png",
-        width: 1200,
-        height: 630,
-        alt: "Synergeek Services — Creative Marketing Agency",
-      },
-    ],
-  },
-  twitter: {
-    title: "Our Services — Lead Gen, Ads, SMM, Content & SEO | Synergeek",
-    description: "Synergeek's creative marketing services: Social Media Lead Generation, Social Media Management, Performance Marketing (Meta & Google Ads), Content Strategy & Branding, and Search Engine Optimization (SEO).",
-    images: ["/synergeek-logo.png"],
-  },
-  alternates: {
-    canonical: "https://www.synergeek.in/services",
-  },
+  title: TITLE,
+  description: DESCRIPTION,
+  openGraph: { title: `${TITLE} | Synergeek`, description: DESCRIPTION, url: URL, images: [OG_IMAGE] },
+  twitter: { title: `${TITLE} | Synergeek`, description: DESCRIPTION, images: [OG_IMAGE.url] },
+  alternates: { canonical: URL },
 }
 
 export default function ServicesLayout({
