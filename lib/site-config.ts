@@ -17,7 +17,8 @@ export const BUSINESS = {
   email: "company@synergeek.in",
   phones: ["+91 96777 41597", "+91 97867 63705"],
   address: {
-    street: "182, Subramanium Road, RS Puram",
+    // Must match the Google Business Profile spelling exactly (NAP consistency).
+    street: "182, Subramaniam Road, R S Puram",
     locality: "Coimbatore",
     region: "Tamil Nadu",
     postalCode: "641002",
@@ -30,7 +31,17 @@ export const BUSINESS = {
   areaServed: ["Coimbatore", "Tiruppur", "Erode", "Salem", "Tamil Nadu"],
 } as const
 
-export const SAME_AS: readonly string[] = [BUSINESS.instagramUrl]
+/** Google Business Profile short link (resolves to the verified Maps listing). */
+export const GBP_URL = "https://g.page/r/CVwBm9U3zEtwEBM"
+
+/** Must mirror the GBP hours: Mon–Sat 09:30–18:30, Sunday closed. */
+export const OPENING_HOURS = {
+  days: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+  opens: "09:30",
+  closes: "18:30",
+} as const
+
+export const SAME_AS: readonly string[] = [GBP_URL, BUSINESS.instagramUrl]
 
 export const formattedAddress = (): string => {
   const { street, locality, postalCode, region } = BUSINESS.address
@@ -100,6 +111,14 @@ export function buildBusinessSchema() {
       "@type": name === "Tamil Nadu" ? "State" : "City",
       name,
     })),
+    openingHoursSpecification: [
+      {
+        "@type": "OpeningHoursSpecification",
+        dayOfWeek: [...OPENING_HOURS.days],
+        opens: OPENING_HOURS.opens,
+        closes: OPENING_HOURS.closes,
+      },
+    ],
     sameAs: SAME_AS,
   }
 }

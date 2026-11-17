@@ -2,6 +2,7 @@ import { describe, expect, test } from "vitest"
 import {
   BUSINESS,
   BUSINESS_ID,
+  GBP_URL,
   SITE_URL,
   buildBusinessSchema,
   buildFaqSchema,
@@ -66,6 +67,26 @@ describe("buildBusinessSchema", () => {
       addressCountry: "IN",
     })
     expect(schema.telephone).toMatch(/^\+91\d{10}$/)
+  })
+
+  test("matches the Google Business Profile street spelling exactly", () => {
+    expect(schema.address.streetAddress).toBe("182, Subramaniam Road, R S Puram")
+  })
+
+  test("publishes Mon–Sat 09:30–18:30 opening hours and no Sunday hours", () => {
+    expect(schema.openingHoursSpecification).toEqual([
+      {
+        "@type": "OpeningHoursSpecification",
+        dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+        opens: "09:30",
+        closes: "18:30",
+      },
+    ])
+  })
+
+  test("links the Google Business Profile in sameAs", () => {
+    expect(schema.sameAs).toContain(GBP_URL)
+    expect(schema.sameAs).toContain(BUSINESS.instagramUrl)
   })
 
   test("serves Coimbatore first and marks Tamil Nadu as a State", () => {

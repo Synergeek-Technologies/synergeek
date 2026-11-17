@@ -125,7 +125,7 @@ export function HomePage({ services, brands, latestPosts, settings }: HomePagePr
     },
     {
       question: "Where is Synergeek located?",
-      answer: "Synergeek is based at 182, Subramanium Road, RS Puram, Coimbatore, Tamil Nadu 641002. We work with businesses in Coimbatore, Tiruppur, Erode and Salem, across India, and with brands internationally."
+      answer: "Synergeek is based at 182, Subramaniam Road, R S Puram, Coimbatore, Tamil Nadu 641002, open Monday to Saturday from 9:30 am to 6:30 pm. We work with businesses in Coimbatore, Tiruppur, Erode and Salem, across India, and with brands internationally."
     },
     {
       question: "What is the typical timeline for a project?",
