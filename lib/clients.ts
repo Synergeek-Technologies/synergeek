@@ -1,18 +1,31 @@
 export interface Client {
   slug: string
   name: string
-  handle: string
+  /** Instagram handle, when the brand's work lives on Instagram. */
+  handle?: string
+  /** Primary public link when there is no Instagram handle (e.g. LinkedIn or website). */
+  url?: string
   industry: string
   location: string
   logo: string
-  images: [string, string]
+  /** Work samples. Only set with real Synergeek-produced visuals. */
+  images?: [string, string]
   accent: string
   work: string[]
-  testimonial: {
+  /** Only set with a real, client-approved quote — never placeholder copy. */
+  testimonial?: {
     quote: string
     author: string
   }
 }
+
+export type ClientWithStory = Client & Required<Pick<Client, "handle" | "images" | "testimonial">>
+
+export const hasStory = (client: Client): client is ClientWithStory =>
+  Boolean(client.handle && client.images && client.testimonial)
+
+export const clientHref = (client: Client): string =>
+  client.url ?? (client.handle ? `https://www.instagram.com/${client.handle}/` : "#")
 
 export const clients: Client[] = [
   {
@@ -120,8 +133,23 @@ export const clients: Client[] = [
       author: "Co-founder, Yalee",
     },
   },
+  {
+    slug: "crucifer-ai",
+    name: "Crucifer AI",
+    url: "https://www.linkedin.com/company/cruciferai/",
+    industry: "AI EdTech",
+    location: "Dubai",
+    logo: "/clients/crucifer-ai-logo.png",
+    accent: "#2E8BE6",
+    work: ["Social Media Content", "Paid Ads", "Lead Generation", "SEO"],
+  },
 ]
 
-export function getClient(slug: string) {
-  return clients.find((client) => client.slug === slug)!
+/** Look up a showcase client (one with real work images and a testimonial). */
+export function getClient(slug: string): ClientWithStory {
+  const client = clients.find((entry) => entry.slug === slug)
+  if (!client || !hasStory(client)) {
+    throw new Error(`getClient: "${slug}" is not a showcase client with images and a testimonial`)
+  }
+  return client
 }

@@ -2,13 +2,16 @@
 
 import type React from "react"
 import { motion, useScroll, useTransform } from "framer-motion"
-import { Mail, MapPin, Phone, ChevronDown, ArrowUp, Share2 } from "lucide-react"
+import { ChevronDown } from "lucide-react"
 import Link from "next/link"
 import { useState, useRef } from "react"
 import { useToast } from "@/hooks/use-toast"
 import emailjs from '@emailjs/browser'
 import { EMAILJS_CONFIG, EMAIL_TEMPLATE_PARAMS } from "@/lib/emailjs-config"
 import { StructuredData } from "@/components/structured-data"
+import { LEAD_EVENTS, trackEvent } from "@/lib/analytics"
+import { SiteFooter } from "@/components/site-footer"
+import { BUSINESS_ID, SITE_URL } from "@/lib/site-config"
 
 export interface ContactPageProps {
   settings: {
@@ -39,47 +42,9 @@ export function ContactPage({ settings }: ContactPageProps) {
     "@context": "https://schema.org",
     "@type": "ContactPage",
     "name": `Contact ${settings.orgName}`,
-    "description": `Contact ${settings.orgName} for Lead Generation, Social Media Management, Performance Marketing, Content Strategy, and SEO.`,
-    "url": "https://www.synergeek.in/contact",
-    "mainEntity": {
-      "@type": "Organization",
-      "name": settings.orgName,
-      "description": settings.companyDescription,
-      "url": "https://www.synergeek.in",
-      "logo": "https://www.synergeek.in/synergeek-logo.png",
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": settings.address,
-        "addressLocality": "RS Puram",
-        "addressRegion": "Tamil Nadu",
-        "addressCountry": "India",
-        "postalCode": "641002"
-      },
-      "contactPoint": [
-        {
-          "@type": "ContactPoint",
-          "telephone": settings.phone1?.replace(/\s/g, ''),
-          "contactType": "customer service",
-          "areaServed": "IN",
-          "availableLanguage": "English"
-        },
-        {
-          "@type": "ContactPoint",
-          "telephone": settings.phone2?.replace(/\s/g, ''),
-          "contactType": "customer service",
-          "areaServed": "IN",
-          "availableLanguage": "English"
-        },
-        {
-          "@type": "ContactPoint",
-          "email": settings.contactEmail,
-          "contactType": "customer service",
-          "areaServed": "IN",
-          "availableLanguage": "English"
-        }
-      ],
-      "sameAs": settings.instagramUrl ? [settings.instagramUrl] : []
-    }
+    "url": `${SITE_URL}/contact`,
+    "about": { "@id": BUSINESS_ID },
+    "mainEntity": { "@id": BUSINESS_ID },
   }
 
   const { scrollYProgress } = useScroll({
@@ -116,6 +81,7 @@ export function ContactPage({ settings }: ContactPageProps) {
       )
 
       if (response.status === 200) {
+        trackEvent(LEAD_EVENTS.formSubmit, { form_name: "contact", page_path: "/contact" })
         toast({
           title: "Message Sent Successfully!",
           description: "We'll get back to you as soon as possible.",
@@ -151,10 +117,6 @@ export function ContactPage({ settings }: ContactPageProps) {
     }))
   }
 
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" })
-  }
-
   const contactLetters = "CONTACT".split("")
 
   return (
@@ -165,7 +127,8 @@ export function ContactPage({ settings }: ContactPageProps) {
         style={{ opacity: heroOpacity, scale: heroScale }}
         className="h-screen flex items-center justify-center relative"
       >
-        <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter inline-flex">
+        <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter text-center">
+          <span className="inline-flex">
           {contactLetters.map((letter, index) => (
             <motion.span
               key={index}
@@ -181,6 +144,12 @@ export function ContactPage({ settings }: ContactPageProps) {
               {letter}
             </motion.span>
           ))}
+          </span>
+          {" "}
+
+          <span className="block mt-2 px-6 text-lg md:text-2xl lg:text-3xl font-semibold tracking-normal text-balance text-primary">
+            Digital Agency in RS Puram, Coimbatore
+          </span>
         </h1>
 
         <div className="absolute bottom-8 left-8 flex items-center gap-2 text-sm">
@@ -320,121 +289,7 @@ export function ContactPage({ settings }: ContactPageProps) {
           </form>
         </div>
       </motion.section>
-      {/* Footer */}
-      <footer className="bg-black text-white relative z-20">
-        {/* Upper Tier - Contact Information */}
-        <div className="py-16 md:py-20 px-6">
-          <div className="max-w-7xl mx-auto">
-            <div className="grid md:grid-cols-3 gap-12 md:gap-16">
-              {/* Email */}
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-                className="text-center"
-              >
-                <motion.a
-                  href={`mailto:${settings.contactEmail}`}
-                  whileHover={{ scale: 1.1, y: -5 }}
-                  className="inline-block"
-                >
-                  <Mail className="w-10 h-10 mx-auto mb-4 text-white" strokeWidth={1.5} />
-                </motion.a>
-                <a
-                  href={`mailto:${settings.contactEmail}`}
-                  className="text-white hover:text-primary transition-colors text-sm md:text-base block"
-                >
-                  {settings.contactEmail}
-                </a>
-              </motion.div>
-
-              {/* Address */}
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.1 }}
-                className="text-center"
-              >
-                <motion.div whileHover={{ scale: 1.1, y: -5 }} className="inline-block">
-                  <MapPin className="w-10 h-10 mx-auto mb-4 text-white" strokeWidth={1.5} />
-                </motion.div>
-                <p className="text-white text-sm md:text-base leading-relaxed">
-                  {settings.address}
-                </p>
-              </motion.div>
-
-              {/* Phone */}
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-                className="text-center"
-              >
-                <motion.div whileHover={{ scale: 1.1, y: -5 }} className="inline-block">
-                  <Phone className="w-10 h-10 mx-auto mb-4 text-white" strokeWidth={1.5} />
-                </motion.div>
-                <div className="space-y-1">
-                  <a
-                    href={`tel:${settings.phone1?.replace(/\s/g, '')}`}
-                    className="text-white hover:text-primary transition-colors text-sm md:text-base block"
-                  >
-                    {settings.phone1}
-                  </a>
-                  <a
-                    href={`tel:${settings.phone2?.replace(/\s/g, '')}`}
-                    className="text-white hover:text-primary transition-colors text-sm md:text-base block"
-                  >
-                    {settings.phone2}
-                  </a>
-                </div>
-              </motion.div>
-            </div>
-          </div>
-        </div>
-
-        {/* Lower Tier - Footer Bar */}
-        <div className="border-t border-white/10 py-5 px-6">
-          <div className="max-w-7xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center text-center md:text-left">
-              {/* Back Top */}
-              <motion.button
-                onClick={scrollToTop}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="flex items-center justify-center md:justify-start gap-2 text-white hover:text-primary transition-colors text-sm"
-              >
-                <ArrowUp className="w-4 h-4" />
-                <span>Back Top</span>
-              </motion.button>
-
-              {/* Copyright */}
-              <motion.p
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-                className="text-white/70 text-xs md:text-sm text-center"
-              >
-                2026 Synergeek. All rights reserved.
-              </motion.p>
-
-              {/* Follow Us */}
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                className="flex items-center justify-center md:justify-end gap-2 text-white hover:text-primary transition-colors text-sm cursor-pointer"
-              >
-                <Link href={settings.instagramUrl || '#'} target="_blank" className="flex items-center gap-2">
-                  <span>Follow Us</span>
-                  <Share2 className="w-4 h-4" />
-                </Link>
-              </motion.div>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter settings={settings} />
     </div>
   )
 }

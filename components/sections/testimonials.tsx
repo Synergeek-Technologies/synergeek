@@ -3,7 +3,7 @@
 import Image from "next/image"
 import { motion } from "framer-motion"
 import { Instagram, Quote } from "lucide-react"
-import { clients, type Client } from "@/lib/clients"
+import { clients, hasStory, type Client, type ClientWithStory } from "@/lib/clients"
 
 function ClientLogo({ client, size = 56 }: { client: Client; size?: number }) {
   return (
@@ -48,7 +48,9 @@ export function ClientMarquee() {
   )
 }
 
-function TestimonialCard({ client, index, featured = false }: { client: Client; index: number; featured?: boolean }) {
+const storyClients: ClientWithStory[] = clients.filter(hasStory)
+
+function TestimonialCard({ client, index, featured = false }: { client: ClientWithStory; index: number; featured?: boolean }) {
   return (
     <motion.article
       initial={{ opacity: 0, y: 40 }}
@@ -132,8 +134,8 @@ export function TestimonialsSection() {
         </motion.div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {clients.map((client, index) => (
-            <TestimonialCard key={client.slug} client={client} index={index} featured={index === 0 || index === clients.length - 1} />
+          {storyClients.map((client, index) => (
+            <TestimonialCard key={client.slug} client={client} index={index} featured={index === 0 || index === storyClients.length - 1} />
           ))}
         </div>
       </div>

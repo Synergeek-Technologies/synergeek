@@ -1,14 +1,7 @@
 "use client"
 
 import { motion, useScroll, useTransform } from "framer-motion"
-import {
-  ArrowRight,
-  Mail,
-  MapPin,
-  Phone,
-  ArrowUp,
-  Share2,
-} from "lucide-react"
+import { ArrowRight } from "lucide-react"
 import { format, parseISO } from "date-fns"
 import Link from "next/link"
 import { useRef, useEffect, useState } from "react"
@@ -23,6 +16,8 @@ import { OldVsNewSection } from "@/components/sections/old-vs-new"
 import { AiSearchSection } from "@/components/sections/ai-search"
 import { FourWaysSection } from "@/components/sections/four-ways"
 import { FaqSection } from "@/components/sections/faq"
+import { SiteFooter } from "@/components/site-footer"
+import { BUSINESS, buildFaqSchema } from "@/lib/site-config"
 
 export interface HomePageProps {
   services: Array<{
@@ -109,123 +104,12 @@ export function HomePage({ services, brands, latestPosts, settings }: HomePagePr
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" })
-  }
-
   const letters = "SYNERGEEK".split("")
-
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": settings.orgName,
-    "description": settings.companyDescription,
-    "url": "https://www.synergeek.in",
-    "telephone": "+91-9677741597",
-    "email": "company@synergeek.in",
-    "logo": "https://www.synergeek.in/synergeek-logo.png",
-    "image": "https://www.synergeek.in/synergeek-logo.png",
-    "address": {
-      "@type": "PostalAddress",
-      "streetAddress": settings.address,
-      "addressLocality": "RS Puram",
-      "addressRegion": "Tamil Nadu",
-      "addressCountry": "India",
-      "postalCode": "641002"
-    },
-    "contactPoint": [
-      {
-        "@type": "ContactPoint",
-        "telephone": settings.phone1?.replace(/\s/g, ''),
-        "contactType": "customer service",
-        "areaServed": "IN",
-        "availableLanguage": "English"
-      },
-      {
-        "@type": "ContactPoint",
-        "telephone": settings.phone2?.replace(/\s/g, ''),
-        "contactType": "customer service",
-        "areaServed": "IN",
-        "availableLanguage": "English"
-      },
-      {
-        "@type": "ContactPoint",
-        "email": settings.contactEmail,
-        "contactType": "customer service",
-        "areaServed": "IN",
-        "availableLanguage": "English"
-      }
-    ],
-    "sameAs": settings.instagramUrl ? [settings.instagramUrl] : [],
-    "foundingDate": "2020",
-    "founders": [
-      { "@type": "Person", "name": "Sri Manikandan R" },
-      { "@type": "Person", "name": "Sai Sidharthan H" }
-    ],
-    "serviceArea": {
-      "@type": "Country",
-      "name": "India"
-    },
-    "hasOfferCatalog": {
-      "@type": "OfferCatalog",
-      "name": "Creative Marketing Services",
-      "itemListElement": [
-        {
-          "@type": "Offer",
-          "itemOffered": {
-            "@type": "Service",
-            "name": "Social Media Lead Generation",
-            "description": "Turning your social media into a system that consistently generates leads."
-          }
-        },
-        {
-          "@type": "Offer",
-          "itemOffered": {
-            "@type": "Service",
-            "name": "Social Media Management",
-            "description": "Complete handling of your content, posting, and growth strategy."
-          }
-        },
-        {
-          "@type": "Offer",
-          "itemOffered": {
-            "@type": "Service",
-            "name": "Performance Marketing (Ads)",
-            "description": "Running targeted ad campaigns to bring in qualified leads."
-          }
-        },
-        {
-          "@type": "Offer",
-          "itemOffered": {
-            "@type": "Service",
-            "name": "Content Strategy & Branding",
-            "description": "Creating content plans that attract, engage, and convert your audience."
-          }
-        },
-        {
-          "@type": "Offer",
-          "itemOffered": {
-            "@type": "Service",
-            "name": "Search Engine Optimization (SEO)",
-            "description": "Improving your online visibility and driving organic traffic."
-          }
-        },
-        {
-          "@type": "Offer",
-          "itemOffered": {
-            "@type": "Service",
-            "name": "Local SEO & Google Business Profile",
-            "description": "Showing up in Maps and local searches with an optimized Google Business Profile and location targeting."
-          }
-        }
-      ]
-    }
-  }
 
   const faqData = [
     {
       question: "What services does Synergeek offer?",
-      answer: "Synergeek offers social media lead generation, social media management, performance marketing (Meta & Google Ads), content strategy & branding, SEO, and local SEO & Google Business Profile optimisation. We turn content, ads, and social media into measurable customer growth for businesses across India."
+      answer: "Synergeek is a digital marketing agency in Coimbatore offering website design and development (including e-commerce), mobile app development, video production, SEO and local SEO, social media management, social media lead generation and performance marketing (Meta & Google Ads). We turn websites, content and ads into measurable customer growth for businesses across Tamil Nadu and India."
     },
     {
       question: "How much does it cost?",
@@ -241,7 +125,7 @@ export function HomePage({ services, brands, latestPosts, settings }: HomePagePr
     },
     {
       question: "Where is Synergeek located?",
-      answer: "Synergeek is based in Coimbatore, Tamil Nadu, India. We work with clients across India and are equipped to partner with brands internationally."
+      answer: "Synergeek is based at 182, Subramanium Road, RS Puram, Coimbatore, Tamil Nadu 641002. We work with businesses in Coimbatore, Tiruppur, Erode and Salem, across India, and with brands internationally."
     },
     {
       question: "What is the typical timeline for a project?",
@@ -265,22 +149,10 @@ export function HomePage({ services, brands, latestPosts, settings }: HomePagePr
     }
   ]
 
-  const faqStructuredData = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": faqData.map(({ question, answer }) => ({
-      "@type": "Question",
-      "name": question,
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": answer
-      }
-    }))
-  }
+  const faqStructuredData = buildFaqSchema(faqData)
 
   return (
     <div ref={containerRef} className="min-h-screen">
-      <StructuredData data={structuredData} />
       <StructuredData data={faqStructuredData} id="faq-schema" />
       {/* Hero Section */}
       <motion.section
@@ -304,10 +176,15 @@ export function HomePage({ services, brands, latestPosts, settings }: HomePagePr
                   </motion.span>
                 ))}
               </span>
+              {" "}
+
+              <span className="block mt-2 text-lg md:text-2xl lg:text-3xl font-semibold tracking-normal text-balance text-primary">
+                {BUSINESS.tagline}
+              </span>
             </h1>
           </div>
           <p
-            className="animate-hero-fade-up-delay text-md mt-[-30px] md:text-lg lg:text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed text-balance"
+            className="animate-hero-fade-up-delay text-md md:text-lg lg:text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed text-balance"
             style={{ fontFamily: "var(--font-roboto-condensed)" }}
           >
             {settings.companyDescription}
@@ -336,7 +213,7 @@ export function HomePage({ services, brands, latestPosts, settings }: HomePagePr
             >
               <h2 className="text-4xl sm:text-5xl md:text-7xl font-bold text-white mb-6 text-balance">GET FOUND</h2>
               <p className="text-lg sm:text-xl md:text-2xl text-white/90 max-w-3xl mx-auto text-balance">
-                Be the answer when your customers search.
+                Be the answer when your customers search — SEO and Google Maps visibility for Coimbatore businesses.
               </p>
             </motion.div>
 
@@ -380,7 +257,7 @@ export function HomePage({ services, brands, latestPosts, settings }: HomePagePr
             >
               <h2 className="text-4xl sm:text-5xl md:text-7xl font-bold text-white mb-6 text-balance">CONVERT</h2>
               <p className="text-lg sm:text-xl md:text-2xl text-white/90 max-w-3xl mx-auto text-balance">
-                Turn attention into qualified leads.
+                Turn attention into qualified leads with performance marketing and social media lead generation.
               </p>
             </motion.div>
 
@@ -424,7 +301,7 @@ export function HomePage({ services, brands, latestPosts, settings }: HomePagePr
             >
               <h2 className="text-4xl sm:text-5xl md:text-7xl font-bold text-black mb-6 text-balance">GROW</h2>
               <p className="text-lg sm:text-xl md:text-2xl text-black/80 max-w-3xl mx-auto text-balance mb-6 sm:mb-8 md:mb-12">
-                Keep them coming back.
+                Keep them coming back with social media management, content and branding.
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 lg:gap-12 max-w-5xl mx-auto text-left">
                 {services.filter(s => s.section === 'tier3').map((service, index) => {
@@ -685,121 +562,7 @@ export function HomePage({ services, brands, latestPosts, settings }: HomePagePr
 
       <FaqSection items={faqData} />
 
-      {/* Footer */}
-      <footer className="bg-black text-white relative z-20">
-        {/* Upper Tier - Contact Information */}
-        <div className="py-16 md:py-20 px-6">
-          <div className="max-w-7xl mx-auto">
-            <div className="grid md:grid-cols-3 gap-12 md:gap-16">
-              {/* Email */}
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-                className="text-center"
-              >
-                <motion.a
-                  href={`mailto:${settings.contactEmail}`}
-                  whileHover={{ scale: 1.1, y: -5 }}
-                  className="inline-block"
-                >
-                  <Mail className="w-10 h-10 mx-auto mb-4 text-white" strokeWidth={1.5} />
-                </motion.a>
-                <a
-                  href={`mailto:${settings.contactEmail}`}
-                  className="text-white hover:text-primary transition-colors text-sm md:text-base block"
-                >
-                  {settings.contactEmail}
-                </a>
-              </motion.div>
-
-              {/* Address */}
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.1 }}
-                className="text-center"
-              >
-                <motion.div whileHover={{ scale: 1.1, y: -5 }} className="inline-block">
-                  <MapPin className="w-10 h-10 mx-auto mb-4 text-white" strokeWidth={1.5} />
-                </motion.div>
-                <p className="text-white text-sm md:text-base leading-relaxed">
-                  {settings.address}
-                </p>
-              </motion.div>
-
-              {/* Phone */}
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-                className="text-center"
-              >
-                <motion.div whileHover={{ scale: 1.1, y: -5 }} className="inline-block">
-                  <Phone className="w-10 h-10 mx-auto mb-4 text-white" strokeWidth={1.5} />
-                </motion.div>
-                <div className="space-y-1">
-                  <a
-                    href={`tel:${settings.phone1?.replace(/\s/g, '')}`}
-                    className="text-white hover:text-primary transition-colors text-sm md:text-base block"
-                  >
-                    {settings.phone1}
-                  </a>
-                  <a
-                    href={`tel:${settings.phone2?.replace(/\s/g, '')}`}
-                    className="text-white hover:text-primary transition-colors text-sm md:text-base block"
-                  >
-                    {settings.phone2}
-                  </a>
-                </div>
-              </motion.div>
-            </div>
-          </div>
-        </div>
-
-        {/* Lower Tier - Footer Bar */}
-        <div className="border-t border-white/10 py-5 px-6">
-          <div className="max-w-7xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center text-center md:text-left">
-              {/* Back Top */}
-              <motion.button
-                onClick={scrollToTop}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="flex items-center justify-center md:justify-start gap-2 text-white hover:text-primary transition-colors text-sm"
-              >
-                <ArrowUp className="w-4 h-4" />
-                <span>Back Top</span>
-              </motion.button>
-
-              {/* Copyright */}
-              <motion.p
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-                className="text-white/70 text-xs md:text-sm text-center"
-              >
-                2026 Synergeek. All rights reserved.
-              </motion.p>
-
-              {/* Follow Us */}
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                className="flex items-center justify-center md:justify-end gap-2 text-white hover:text-primary transition-colors text-sm cursor-pointer"
-              >
-                <Link href={settings.instagramUrl || '#'} target="_blank" className="flex items-center gap-2">
-                  <span>Follow Us</span>
-                  <Share2 className="w-4 h-4" />
-                </Link>
-              </motion.div>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter settings={settings} />
     </div>
   )
 }
